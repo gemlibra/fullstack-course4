@@ -1,7 +1,5 @@
 $(function () { // Same as document.addEventListener("DOMContentLoaded"...
 
-//<a href="#" onclick="$dc.loadMenuItems({{randomCategoryShortName}});">
-  
   // Same as document.querySelector("#navbarToggle").addEventListener("blur",...
   $("#navbarToggle").blur(function (event) {
     var screenWidth = window.innerWidth;
@@ -85,8 +83,8 @@ document.addEventListener("DOMContentLoaded", function (event) {
 showLoading("#main-content");
 $ajaxUtils.sendGetRequest(
   allCategoriesUrl,
-  [menuItemHtm], // (GX MOD) ***** <---- TODO: STEP 1: Substitute [...] ******
-  true); // Explicitly setting the flag to JSON from server processed into an object literal
+  buildAndShowHomeHTML, // ***** <---- TODO: STEP 1: Substitute [...] ******
+  true); // Explicitly setting the flag to get JSON from server processed into an object literal
 });
 // *** finish **
 
@@ -96,12 +94,15 @@ $ajaxUtils.sendGetRequest(
 function buildAndShowHomeHTML (categories) {
 
   // Load home snippet page
-  $ajaxUtils.sendGetRequest(homeHtmlUrl, function (homeHtml) {
+  $ajaxUtils.sendGetRequest(
+    homeHtmlUrl,
+    function (homeHtml) {
 
       // TODO: STEP 2: Here, call chooseRandomCategory, passing it retrieved 'categories'
       // Pay attention to what type of data that function returns vs what the chosenCategoryShortName
       // variable's name implies it expects.
-      // var chosenCategoryShortName = ....
+      var chosenCategoryShortName = chooseRandomCategory(categories).short_name;
+      var quotedShortName = "'" + chosenCategoryShortName + "'";
 
 
       // TODO: STEP 3: Substitute {{randomCategoryShortName}} in the home html snippet with the
@@ -115,19 +116,19 @@ function buildAndShowHomeHTML (categories) {
       // Hint: you need to surround the chosen category short name with something before inserting
       // it into the home html snippet.
       //
-      // var homeHtmlToInsertIntoMainPage = ....
+      var homeHtmlToInsertIntoMainPage =
+        insertProperty(homeHtml, "randomCategoryShortName", quotedShortName);
 
 
       // TODO: STEP 4: Insert the produced HTML in STEP 3 into the main page
       // Use the existing insertHtml function for that purpose. Look through this code for an example
       // of how to do that.
-      // ....
+      insertHtml("#main-content", homeHtmlToInsertIntoMainPage)
 
     },
     false); // False here because we are getting just regular HTML from the server, so no need to process JSON.
 }
-  
-chooseRandomCategory(categoryHtml)  //GX MOD.
+
 
 // Given array of category objects, returns a random category object.
 function chooseRandomCategory (categories) {
@@ -229,7 +230,7 @@ function buildAndShowMenuItemsHTML (categoryMenuItems) {
           switchMenuToActive();
 
           var menuItemsViewHtml =
-            buildMenuItemsViewHtml(chosenCategoryShortName, //GX MOD
+            buildMenuItemsViewHtml(categoryMenuItems,
                                    menuItemsTitleHtml,
                                    menuItemHtml);
           insertHtml("#main-content", menuItemsViewHtml);
