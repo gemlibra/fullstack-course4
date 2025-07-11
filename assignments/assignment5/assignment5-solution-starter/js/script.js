@@ -1,5 +1,7 @@
 $(function () { // Same as document.addEventListener("DOMContentLoaded"...
 
+//<a href="#" onclick="$dc.loadMenuItems({{randomCategoryShortName}});">
+  
   // Same as document.querySelector("#navbarToggle").addEventListener("blur",...
   $("#navbarToggle").blur(function (event) {
     var screenWidth = window.innerWidth;
@@ -227,7 +229,7 @@ function buildAndShowMenuItemsHTML (categoryMenuItems) {
           switchMenuToActive();
 
           var menuItemsViewHtml =
-            buildMenuItemsViewHtml(categoryMenuItems,
+            buildMenuItemsViewHtml(chosenCategoryShortName, //GX MOD
                                    menuItemsTitleHtml,
                                    menuItemHtml);
           insertHtml("#main-content", menuItemsViewHtml);
