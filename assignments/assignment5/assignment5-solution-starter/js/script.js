@@ -117,7 +117,7 @@ function buildAndShowHomeHTML (categories) {
       // it into the home html snippet.
       //
       var ouputToLandingPage =
-        insertProperty(homeHtml, "randomCategoryShortName", gxShortName);
+        insertProperty(homeHtml, "randomCategoryShortName", gxShortName); //GX MOD
 
 
       // TODO: STEP 4: Insert the produced HTML in STEP 3 into the main page
